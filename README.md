@@ -14,6 +14,7 @@ This repository contains a collection of data science projects and notebooks. Ea
 8. [PandemAI](#8-pandemai)
 9. [Supervised Learning with SVM](#9-supervised-learning-with-svm)
 10. [Supervised Learning with Random Forests](#10-supervised-learning-with-random-forests)
+11. [Customer Churn Prediction](#11-Customer-Churn-Prediction)
 
 ---
 
