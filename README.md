@@ -144,6 +144,39 @@ This notebook examines the application of Random Forest algorithms for supervise
 - **Evaluation:** Utilizing confusion matrices and classification reports to measure accuracy and performance.
 
 ---
+## 11. Customer Churn Prediction
+**Notebook**: [Customer Churn Prediction.ipynb](https://github.com/aueskinj/Data-Science-Projects/blob/main/Customer_Churn_Prediction.ipynb)
+#### **Project Overview**
+This project focuses on predicting customer churn using various machine learning models to identify factors contributing to customer attrition. The analysis is performed using a dataset of retail customer information, including demographic and behavioral attributes.
+
+#### **Key Components**
+i. **Data Exploration:**
+   - Loaded and explored the dataset to understand its structure and the distribution of features.
+   - Visualized target variable distribution, numerical and categorical features, and correlations.
+
+ii. **Feature Engineering:**
+   - Encoded categorical variables and scaled numerical features for model training.
+   - Split data into training and testing sets.
+
+iii. **Model Training and Evaluation:**
+   - Trained several classification models: Random Forest, AdaBoost, Support Vector Classifier, and XGBoost.
+   - Evaluated models using accuracy, classification reports, and confusion matrices.
+
+iv. **Results:**
+   - Compared model performance to select the best performing model for predicting customer churn.
+   - Generated insights into the effectiveness of different machine learning algorithms in the context of customer churn prediction.
+
+
+#### **Dependencies**
+- `pandas`: 1.5.3
+- `numpy`: 1.24.3
+- `matplotlib`: 3.8.0
+- `seaborn`: 0.14.0
+- `scikit-learn`: 1.3.0
+- `xgboost`: 2.1.0
+
+#### **Acknowledgements**
+- Dataset: [Online Retail Customer Churn Dataset](https://www.kaggle.com/datasets/)
 
 ## Getting Started
 
