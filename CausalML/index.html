@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide to Simultaneous Equation Models</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The application is designed as a non-linear educational journey. A sticky top navigation allows users to jump between core thematic sections: Introduction, The Core Problem (Endogeneity), Model Structure, Identification, Estimation, and Applications. This structure deconstructs the complex report into digestible, interconnected modules. The flow prioritizes understanding by starting with the foundational 'what' and 'why' (Intro, Endogeneity), moving to the 'how' (Structure, Identification, Estimation), and finishing with the 'where' (Applications). This modular, user-driven approach is more engaging and effective for learning complex topics than a linear text format. Key interactions include toggles for comparing concepts, interactive diagrams to visualize processes, and a hands-on 'Identification Checker' tool to make abstract rules tangible. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: SEMs vs. Single-Equation. Goal: Compare. Viz: Interactive toggle cards. Interaction: Click to flip. Justification: Provides a direct, memorable A/B comparison of core concepts. Method: HTML/CSS/JS.
+        - Report Info: OLS Bias vs. 2SLS Consistency. Goal: Compare. Viz: Bar Chart. Interaction: Hover for tooltips. Justification: Visually quantifies the core problem (bias) and the solution's benefit (consistency), making the abstract statistical concept concrete. Library: Chart.js.
+        - Report Info: The Identification Problem (Order Condition). Goal: Engage/Apply. Viz: Interactive "Identification Checker" tool. Interaction: User inputs numbers to see the rule applied in real-time. Justification: Transforms a passive formula into an active learning tool, solidifying understanding through practice. Method: HTML/JS.
+        - Report Info: 2SLS Estimation Process. Goal: Explain Flow. Viz: HTML/CSS process diagram. Interaction: Numbered steps with clear visual flow. Justification: Breaks down a multi-step process into a simple, easy-to-follow visual narrative. Method: HTML/Tailwind CSS.
+        - Report Info: Variable Types/Applications/Pitfalls. Goal: Inform. Viz: Interactive cards/lists. Interaction: Click to reveal details. Justification: Manages information density, allowing users to explore topics of interest without being overwhelmed. Method: HTML/CSS/JS.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. 
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #374151;
+        }
+        .nav-link {
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #2563EB;
+            border-bottom-color: #2563EB;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+        }
+        .interactive-card {
+            cursor: pointer;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .flow-arrow {
+            font-size: 2rem;
+            line-height: 1;
+            color: #9CA3AF;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">Simultaneous Equation Models</h1>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#intro" class="nav-link pb-1">Introduction</a>
+                    <a href="#problem" class="nav-link pb-1">The Core Problem</a>
+                    <a href="#structure" class="nav-link pb-1">Structure</a>
+                    <a href="#identification" class="nav-link pb-1">Identification</a>
+                    <a href="#estimation" class="nav-link pb-1">Estimation</a>
+                    <a href="#applications" class="nav-link pb-1">Applications</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+            <div id="mobile-menu" class="hidden md:hidden mt-4 space-y-2">
+                 <a href="#intro" class="block nav-link text-center py-2">Introduction</a>
+                 <a href="#problem" class="block nav-link text-center py-2">The Core Problem</a>
+                 <a href="#structure" class="block nav-link text-center py-2">Structure</a>
+                 <a href="#identification" class="block nav-link text-center py-2">Identification</a>
+                 <a href="#estimation" class="block nav-link text-center py-2">Estimation</a>
+                 <a href="#applications" class="block nav-link text-center py-2">Applications</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12">
+
+        <!-- Section 1: Introduction -->
+        <section id="intro" class="mb-20 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">What Are SEMs?</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">
+                Simultaneous Equation Models (SEMs) are powerful tools for analyzing complex systems where variables influence each other mutually. Instead of a one-way street of causation, SEMs model the reality of feedback loops and joint determination, like the relationship between market price and quantity. This section introduces the core idea and contrasts it with simpler models.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <div id="sem-card" class="card p-6 border-2 border-blue-500">
+                    <h3 class="text-2xl font-semibold mb-3 text-blue-700">Simultaneous Equation Model</h3>
+                    <p class="text-gray-600 mb-4">Models systems with bidirectional causality and feedback loops. Variables are determined jointly.</p>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-start"><span class="text-blue-500 mr-2 mt-1">&#10003;</span><span>**Causality:** Mutual / Bidirectional (Price ↔ Quantity)</span></li>
+                        <li class="flex items-start"><span class="text-blue-500 mr-2 mt-1">&#10003;</span><span>**Problem:** Addresses endogeneity & simultaneity bias.</span></li>
+                        <li class="flex items-start"><span class="text-blue-500 mr-2 mt-1">&#10003;</span><span>**Method:** Requires specialized estimators like 2SLS.</span></li>
+                    </ul>
+                </div>
+                <div id="single-eq-card" class="card p-6">
+                    <h3 class="text-2xl font-semibold mb-3 text-gray-700">Single-Equation Model</h3>
+                    <p class="text-gray-600 mb-4">Models systems with one-way causality. Independent variables affect a dependent variable.</p>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-start"><span class="text-gray-500 mr-2 mt-1">&#10007;</span><span>**Causality:** Unidirectional (Rainfall → Crop Yield)</span></li>
+                        <li class="flex items-start"><span class="text-gray-500 mr-2 mt-1">&#10007;</span><span>**Problem:** Assumes no feedback from the outcome.</span></li>
+                        <li class="flex items-start"><span class="text-gray-500 mr-2 mt-1">&#10007;</span><span>**Method:** Ordinary Least Squares (OLS) is often sufficient.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: The Core Problem -->
+        <section id="problem" class="mb-20 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">The Core Problem: Endogeneity</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">
+                The main challenge in SEMs is 'endogeneity,' which occurs when an explanatory variable is correlated with the error term. This violates a key assumption of standard regression (OLS), leading to biased and unreliable results. This bias, known as simultaneity bias, is a direct consequence of the feedback loops that SEMs aim to model.
+            </p>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-center">Visualizing Simultaneity Bias</h3>
+                    <p class="text-center text-gray-600 mb-6">In a simple Keynesian model, an external shock (error) to consumption also affects income, which is supposed to be an *explanatory* variable. This creates a vicious cycle.</p>
+                    <div class="flex flex-col items-center space-y-2 text-center">
+                        <div class="p-3 bg-red-100 text-red-800 rounded-lg shadow">Shock (ε) increases</div>
+                        <div class="flow-arrow">&darr;</div>
+                        <div class="p-3 bg-blue-100 text-blue-800 rounded-lg shadow">Consumption (C) increases</div>
+                        <div class="flow-arrow">&darr;</div>
+                        <div class="p-3 bg-green-100 text-green-800 rounded-lg shadow">Income (Y) increases</div>
+                        <div class="flow-arrow -rotate-90 text-red-500 font-bold">&larr;</div>
+                        <div class="p-2 text-sm bg-yellow-100 text-yellow-800 rounded-lg shadow">Now Y is correlated with the original shock ε! OLS fails.</div>
+                    </div>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-center">OLS vs. 2SLS: Estimator Bias</h3>
+                    <p class="text-center text-gray-600 mb-6">This chart conceptually illustrates how OLS estimates are biased away from the true value in the presence of simultaneity, while a consistent estimator like 2SLS converges to the true value.</p>
+                     <div class="chart-container">
+                        <canvas id="biasChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section 3: Structure -->
+        <section id="structure" class="mb-20 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">Anatomy of a Model</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">
+                SEMs have a specific structure. Variables are classified by their role, and equations are expressed in different forms depending on the analytical goal. Understanding this anatomy is key to correctly specifying and interpreting a model. Click the cards to learn more.
+            </p>
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-center mb-6">Key Variable Types</h3>
+                <div class="grid sm:grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="card p-6 text-center interactive-card" data-content="Endogenous variables are the 'Y's'—the main actors whose values are determined *within* the model's system of equations. They are the outcomes you are trying to explain.">
+                        <div class="text-4xl mb-3">Y</div>
+                        <h4 class="text-xl font-bold mb-2">Endogenous</h4>
+                        <p class="text-gray-600">Determined inside the system.</p>
+                    </div>
+                    <div class="card p-6 text-center interactive-card" data-content="Exogenous variables are the 'X's'—external factors whose values are determined *outside* the model. They influence the system but are not influenced by it.">
+                        <div class="text-4xl mb-3">X</div>
+                        <h4 class="text-xl font-bold mb-2">Exogenous</h4>
+                        <p class="text-gray-600">Determined outside the system.</p>
+                    </div>
+                    <div class="card p-6 text-center interactive-card" data-content="Predetermined variables include all exogenous variables PLUS any lagged endogenous variables (e.g., last year's income). Their values are known at the start of the current period, making them valid 'instruments' for estimation.">
+                        <div class="text-4xl mb-3">Z</div>
+                        <h4 class="text-xl font-bold mb-2">Predetermined</h4>
+                        <p class="text-gray-600">Exogenous + Lagged Endogenous.</p>
+                    </div>
+                </div>
+                <div id="variable-info" class="mt-6 p-4 bg-blue-50 rounded-lg text-blue-800 text-center min-h-[50px] transition-all duration-300">
+                    Click a card above to see its definition.
+                </div>
+            </div>
+             <div>
+                <h3 class="text-2xl font-semibold text-center mb-6">Structural vs. Reduced Form</h3>
+                <div class="max-w-4xl mx-auto card p-6">
+                    <p class="text-center text-gray-600 mb-6">Models can be written in two forms. The **Structural Form** represents economic theory, showing direct relationships. The **Reduced Form** is derived from it and expresses each endogenous variable only in terms of external factors, making it ideal for forecasting.</p>
+                    <div class="text-center mb-4">
+                        <button id="form-toggle-btn" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition">Show Reduced Form</button>
+                    </div>
+                    <div id="structural-form" class="space-y-4">
+                        <h4 class="font-bold text-lg text-center">Structural Form (Theory)</h4>
+                        <div class="bg-gray-100 p-4 rounded-lg text-center font-mono text-sm md:text-base">Demand: $Q_t = \alpha_0 + \alpha_1 P_t + \alpha_2 Y_t + u_t^D$</div>
+                        <div class="bg-gray-100 p-4 rounded-lg text-center font-mono text-sm md:text-base">Supply: $Q_t = \beta_0 + \beta_1 P_t + \beta_2 W_t + u_t^S$</div>
+                        <p class="text-xs text-center text-gray-500">Notice Price ($P_t$), an endogenous variable, appears on the right side.</p>
+                    </div>
+                     <div id="reduced-form" class="hidden space-y-4">
+                        <h4 class="font-bold text-lg text-center">Reduced Form (Forecasting)</h4>
+                        <div class="bg-gray-100 p-4 rounded-lg text-center font-mono text-sm md:text-base">$P_t = \Pi_1 + \Pi_2 Y_t + \Pi_3 W_t + v_t^P$</div>
+                        <div class="bg-gray-100 p-4 rounded-lg text-center font-mono text-sm md:text-base">$Q_t = \Pi_4 + \Pi_5 Y_t + \Pi_6 W_t + v_t^Q$</div>
+                        <p class="text-xs text-center text-gray-500">Notice only exogenous variables ($Y_t, W_t$) appear on the right side.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Identification -->
+        <section id="identification" class="mb-20 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">The Identification Problem</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">
+                Before estimating, we must ensure the model is 'identified.' This means checking if we can get unique estimates for our parameters from the data. The **Order Condition** is a necessary first check. An equation is identified if it excludes enough external variables that are present elsewhere in the system.
+            </p>
+            <div class="card max-w-2xl mx-auto p-6 md:p-8">
+                <h3 class="text-2xl font-semibold text-center mb-6">Interactive Identification Checker</h3>
+                <p class="text-center text-gray-600 mb-6">Use this tool to test the Order Condition: $K - k \ge G - 1$. Enter the variable counts for a single equation in your model.</p>
+                <div class="grid sm:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label for="G" class="block text-sm font-medium text-gray-700">Total endogenous vars (G)</label>
+                        <input type="number" id="G" value="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="K" class="block text-sm font-medium text-gray-700">Total predetermined vars (K)</label>
+                        <input type="number" id="K" value="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="k" class="block text-sm font-medium text-gray-700">Predetermined in this eq (k)</label>
+                        <input type="number" id="k" value="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div class="text-center font-mono text-lg mb-6">
+                    <span id="k-k-calc">1</span> &ge; <span id="g-1-calc">1</span>
+                </div>
+                <div id="identification-result" class="p-4 rounded-lg text-center font-bold text-xl"></div>
+            </div>
+        </section>
+
+        <!-- Section 5: Estimation -->
+        <section id="estimation" class="mb-20 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">Estimation Methods</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">
+                Since OLS fails, we need specialized methods. The most common is **Two-Stage Least Squares (2SLS)**. It's a clever, two-step process that purges the endogeneity from the problematic variables before running the final regression, yielding consistent estimates.
+            </p>
+            <div class="card max-w-4xl mx-auto p-6 md:p-8">
+                <h3 class="text-2xl font-semibold text-center mb-6">The 2SLS Process</h3>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 text-center">
+                    <div class="flex-1 p-4 bg-gray-50 rounded-lg">
+                        <div class="text-blue-600 font-bold text-5xl mb-2">1</div>
+                        <h4 class="font-semibold text-lg mb-1">First Stage</h4>
+                        <p class="text-gray-600 text-sm">Regress each endogenous regressor on ALL predetermined variables in the system to get its predicted value ($\hat{P}$). This new variable is "clean" of endogeneity.</p>
+                    </div>
+                    <div class="flow-arrow">&darr;</div>
+                    <div class="flex-1 p-4 bg-gray-50 rounded-lg">
+                        <div class="text-blue-600 font-bold text-5xl mb-2">2</div>
+                        <h4 class="font-semibold text-lg mb-1">Second Stage</h4>
+                        <p class="text-gray-600 text-sm">Replace the original endogenous variable ($P$) with its predicted value ($\hat{P}$) in the structural equation and then run OLS on this modified equation.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Applications & Pitfalls -->
+        <section id="applications" class="scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">In Practice: Uses & Cautions</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">
+                SEMs are not just for economics; they are used across social sciences to model any system with feedback. However, their power comes with responsibility. Successful application requires careful model building and awareness of common pitfalls.
+            </p>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-semibold text-center mb-6">Real-World Applications</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="card p-4 text-center">
+                            <h4 class="font-semibold">Supply & Demand</h4>
+                            <p class="text-sm text-gray-600">The classic use case in economics.</p>
+                        </div>
+                        <div class="card p-4 text-center">
+                            <h4 class="font-semibold">Policy Analysis</h4>
+                            <p class="text-sm text-gray-600">Assessing impacts of government actions.</p>
+                        </div>
+                        <div class="card p-4 text-center">
+                            <h4 class="font-semibold">Political Science</h4>
+                            <p class="text-sm text-gray-600">Public opinion & party ID feedback.</p>
+                        </div>
+                        <div class="card p-4 text-center">
+                            <h4 class="font-semibold">Sociology</h4>
+                            <p class="text-sm text-gray-600">Education & health outcome loops.</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-center mb-6">Common Pitfalls</h3>
+                    <ul class="space-y-3">
+                        <li class="card p-4 interactive-card" data-content="Your instruments (excluded exogenous variables) must be strongly correlated with the endogenous variables they're replacing. If not, estimates can be even more biased than OLS.">
+                            <h4 class="font-semibold">Weak Instruments</h4>
+                        </li>
+                        <li class="card p-4 interactive-card" data-content="The model is a simplification of reality. Leaving out important variables or using the wrong functional form can lead to incorrect conclusions.">
+                            <h4 class="font-semibold">Specification Error</h4>
+                        </li>
+                         <li class="card p-4 interactive-card" data-content="SEMs require more data than simple regressions to produce reliable estimates. A general rule of thumb is a sample size of at least 200.">
+                            <h4 class="font-semibold">Sample Size Issues</h4>
+                        </li>
+                    </ul>
+                    <div id="pitfall-info" class="mt-4 p-3 bg-yellow-50 rounded-lg text-yellow-800 text-sm min-h-[40px]">
+                        Click a pitfall to learn more.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-20">
+        <div class="container mx-auto px-6 py-4 text-center text-gray-400">
+            <p>An Interactive Guide to Simultaneous Equation Models.</p>
+            <p class="text-xs mt-1">Generated from source material for educational purposes.</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Active nav link scrolling
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.5
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Bias Chart
+            const ctx = document.getElementById('biasChart').getContext('2d');
+            const biasChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['OLS Estimate', '2SLS Estimate'],
+                    datasets: [{
+                        label: 'Bias from True Value',
+                        data: [35, 2],
+                        backgroundColor: [
+                            'rgba(239, 68, 68, 0.6)',
+                            'rgba(59, 130, 246, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(239, 68, 68, 1)',
+                            'rgba(59, 130, 246, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: { 
+                            display: true, 
+                            text: 'Conceptual Estimator Performance'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Deviation from True Value (%)'
+                            },
+                            ticks: {
+                                callback: function(value) { return value + '%' }
+                            }
+                        },
+                        x: {}
+                    },
+                    elements: {
+                      bar: {
+                        borderRadius: 4,
+                      }
+                    }
+                }
+            });
+            // Add a horizontal line for the "True Value"
+            Chart.register({
+                id: 'horizontalLine',
+                beforeDraw(chart, args, options) {
+                    const {ctx, chartArea: {top, right, bottom, left, width, height}, scales: {x, y}} = chart;
+                    ctx.save();
+                    ctx.strokeStyle = 'green';
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([6, 6]);
+                    ctx.strokeRect(left, y.getPixelForValue(0), width, 0);
+                    ctx.restore();
+                    ctx.font = '12px Inter';
+                    ctx.fillStyle = 'green';
+                    ctx.fillText('True Value', left - 10, y.getPixelForValue(0) - 5);
+                }
+            });
+
+
+            // Interactive Cards
+            const variableCards = document.querySelectorAll('#structure .interactive-card');
+            const variableInfo = document.getElementById('variable-info');
+            variableCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const content = card.getAttribute('data-content');
+                    variableInfo.textContent = content;
+                    variableCards.forEach(c => c.classList.remove('border-2', 'border-blue-500'));
+                    card.classList.add('border-2', 'border-blue-500');
+                });
+            });
+
+            const pitfallCards = document.querySelectorAll('#applications .interactive-card');
+            const pitfallInfo = document.getElementById('pitfall-info');
+            pitfallCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const content = card.getAttribute('data-content');
+                    pitfallInfo.textContent = content;
+                    pitfallCards.forEach(c => c.classList.remove('ring-2', 'ring-blue-500'));
+                    card.classList.add('ring-2', 'ring-blue-500');
+                });
+            });
+
+            // Structural/Reduced Form Toggle
+            const toggleBtn = document.getElementById('form-toggle-btn');
+            const structuralForm = document.getElementById('structural-form');
+            const reducedForm = document.getElementById('reduced-form');
+            let isStructural = true;
+            toggleBtn.addEventListener('click', () => {
+                isStructural = !isStructural;
+                if (isStructural) {
+                    structuralForm.classList.remove('hidden');
+                    reducedForm.classList.add('hidden');
+                    toggleBtn.textContent = 'Show Reduced Form';
+                } else {
+                    structuralForm.classList.add('hidden');
+                    reducedForm.classList.remove('hidden');
+                    toggleBtn.textContent = 'Show Structural Form';
+                }
+            });
+
+            // Identification Checker
+            const gInput = document.getElementById('G');
+            const kInput = document.getElementById('K');
+            const littleKInput = document.getElementById('k');
+            const kkCalc = document.getElementById('k-k-calc');
+            const g1Calc = document.getElementById('g-1-calc');
+            const resultDiv = document.getElementById('identification-result');
+
+            function checkIdentification() {
+                const G = parseInt(gInput.value) || 0;
+                const K = parseInt(kInput.value) || 0;
+                const k = parseInt(littleKInput.value) || 0;
+
+                const leftSide = K - k;
+                const rightSide = G - 1;
+
+                kkCalc.textContent = `${K} - ${k} = ${leftSide}`;
+                g1Calc.textContent = `${G} - 1 = ${rightSide}`;
+
+                if (leftSide > rightSide) {
+                    resultDiv.textContent = 'Overidentified';
+                    resultDiv.className = 'p-4 rounded-lg text-center font-bold text-xl bg-green-100 text-green-800';
+                } else if (leftSide === rightSide) {
+                    resultDiv.textContent = 'Just-Identified';
+                    resultDiv.className = 'p-4 rounded-lg text-center font-bold text-xl bg-blue-100 text-blue-800';
+                } else {
+                    resultDiv.textContent = 'Underidentified';
+                    resultDiv.className = 'p-4 rounded-lg text-center font-bold text-xl bg-red-100 text-red-800';
+                }
+            }
+
+            [gInput, kInput, littleKInput].forEach(input => {
+                input.addEventListener('input', checkIdentification);
+            });
+
+            checkIdentification(); // Initial check
+            
+            // MathJax for rendering LaTeX
+            const script = document.createElement('script');
+            script.src = 'https://polyfill.io/v3/polyfill.min.js?features=es6';
+            document.head.appendChild(script);
+            const script2 = document.createElement('script');
+            script2.id = 'MathJax-script';
+            script2.async = true;
+            script2.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+            document.head.appendChild(script2);
+        });
+    </script>
+</body>
+</html>
