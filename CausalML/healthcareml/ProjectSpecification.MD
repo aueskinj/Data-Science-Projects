@@ -1,89 +1,100 @@
-# Data Science Project Charter: Causal Analysis of Diabetes Readmission Rates
+# Data Science Project Specification: Causal Analysis of Diabetes Readmission Rates
 
 ## 1. Project Title
-**Evaluating the Causal Impact of HbA1c Measurement on Hospital Readmission Rates for Diabetic Patients**
+Evaluating observational causal effects of inpatient diabetes treatment intensity on 30-day readmission risk.
 
-## 2. Project Goal
-To **quantify the causal effect** of HbA1c measurement on hospital readmission rates for diabetic patients, and to demonstrate how causal inference methods can enhance the predictive power and explainability of machine learning (ML) models. This project aims to go beyond simple correlation analysis and establish true causal relationships that can inform healthcare policy and practice.
+## 2. Current Scope Covered in Notebook
+This specification reflects what is implemented and executed in the notebook.
 
-## 3. Objectives
+Primary implementation file:
+- healthcarecausalml.ipynb
 
-* Develop a **causal model** representing the relationships between patient characteristics, HbA1c measurement, and readmission rates.
-* **Identify and control for potential confounding variables** that may bias the observed relationships.
-* **Estimate the causal effect** of HbA1c measurement on readmission rates using appropriate causal inference techniques.
-* Compare the performance of **causal ML models** with standard non-causal ML models in terms of prediction accuracy and explainability.
-* **Interpret the findings** to provide actionable insights for healthcare providers and policymakers.
-* Evaluate the **direct and indirect effects** of different variables using the mediation formula.
-* **Test the validity of causal assumptions** using graphical and statistical methods.
-* Explore the **potential for counterfactual analysis** to evaluate different intervention scenarios.
+Current notebook coverage:
+- Structural leakage removal for impossible-readmission encounters.
+- Outcome definition aligned to true 30-day readmission.
+- Clinical feature engineering for diagnosis and specialty grouping.
+- Primary treatment analysis: medication change during encounter.
+- Secondary treatment analysis: diabetes medication prescribed.
+- Doubly robust effect estimation using AIPW.
+- Positivity diagnostics and trimming (0.05 to 0.95).
+- Subgroup effect summaries for Circulatory and Diabetes diagnosis groups.
 
-## 4. Data Source
-The primary data source will be the **"Diabetes 130-US hospitals for years 1999-2008" dataset from the UCI Machine Learning Repository**. This dataset includes over 70,000 clinical database patient records and contains a variety of patient-related attributes, including demographics, medical history, lab results, medication information, and readmission status.
+## 3. Data Source
+- Dataset: Diabetes 130-US hospitals for years 1999-2008 (UCI / Health Facts extract in project zip).
+- Effective cohort after leakage filtering: 99,340 encounters.
 
-### Specific Data Points to be Used:
-* **HbA1c test results**: The primary treatment variable crucial for examining its causal effect.
-* **Readmission Status**: Indicates if the patient was readmitted and is the primary outcome variable.
-* **Patient Demographics**: Age, gender, race.
-* **Medical History**: Diagnoses, previous admissions, and other medical conditions.
-* **Medication Information**: Details of prescriptions during the stay.
-* **Other Lab Results**: Relevant variables to address potential confounding.
+## 4. Implemented Causal Design
+### 4.1 Outcome
+- `readmit_30 = 1` if `readmitted == "<30"`, else `0`.
 
-## 5. Causal Inference Methods
+### 4.2 Leakage Handling
+- Excluded `discharge_disposition_id` in `{11, 13, 14, 19, 20, 21}` to remove encounters structurally ineligible for 30-day readmission.
 
-* **Causal Diagrams**: Construct causal diagrams to visualize the hypothesized relationships between variables, clarify assumptions, and guide method selection.
-* **Intervention Analysis**: Use intervention analysis to estimate how manipulating specific factors, such as HbA1c testing, affects readmission rates, employing methods like the *do(x)* operator.
-* **Confounding Control**: Control potential confounders using techniques such as the **back-door criterion**.
-* **Structural Equation Modelling (SEM)**: Utilize SEM to model causal pathways and graphically understand variable relationships.
-* **EconML Library**:
-  * Estimate **Heterogeneous Treatment Effects** using methods like **Double Machine Learning (DML)** and **Doubly Robust (DR)** estimators.
-  * Explore **Instrumental Variables (IV)** methods if appropriate IVs can be identified.
-  * Apply **Meta Learners** such as T-Learner, S-Learner, and X-Learner.
-  * Investigate the effects of **policy changes** on readmission rates.
-  * Interpret models using tools like **Tree Interpreter and SHAP**.
-* **Counterfactual Analysis**: Explore hypothetical scenarios, such as "What would the readmission rate be if a specific patient did not have a HbA1c test?" to assess intervention impacts.
+### 4.3 Treatment Definitions
+- Primary treatment: `medication_change = 1` when `change == "Ch"`.
+- Secondary treatment: `diabetes_med_prescribed = 1` when `diabetesMed == "Yes"`.
 
-## 6. Machine Learning Models
+### 4.4 Adjustment Set (Pre-treatment Confounders)
+- age, race, gender
+- admission_type_id, admission_source_id, payer_code
+- number_inpatient, number_emergency, number_outpatient
+- number_diagnoses, time_in_hospital
+- medical_specialty_group, diag1_group
 
-* **Causal ML Models**: Create and evaluate causal models using the methods outlined.
-* **Non-Causal ML Models**: Train and test standard ML models (e.g., regression, classification, decision trees) for comparison.
-* **Performance Metrics**: Evaluate models using accuracy, precision, recall, F1-score, and AUC, with a focus on explainability and predictive accuracy.
+### 4.5 Estimation Workflow
+- Propensity model: LogisticRegression with balanced class weights.
+- Outcome nuisance models: separate GradientBoostingClassifier models for treated and control.
+- Estimator: Augmented Inverse Probability Weighting (AIPW).
+- Diagnostics:
+  - Propensity overlap histogram.
+  - Trimming to overlap region: propensity in [0.05, 0.95].
 
-## 7. Expected Outcomes
+## 5. Results Covered
+### 5.1 Primary Treatment: Medication Change
+- Treatment prevalence: 0.4643.
+- Observed readmission rates:
+  - No medication change: 0.1084
+  - Medication change: 0.1202
+- Observed risk difference: 0.0118.
+- AIPW ATE: 0.0074, 95% CI [0.0034, 0.0115].
+- AIPW ATE (trimmed): 0.0075, 95% CI [0.0035, 0.0115].
 
-* Quantified causal effect of HbA1c measurement on hospital readmission rates.
-* Identification of key confounding factors affecting readmission rates.
-* Demonstration of how causal inference improves ML model predictive power and explainability compared to purely statistical models.
-* Actionable insights for healthcare providers and policymakers regarding the optimal use of HbA1c testing.
-* A validated causal model for future research and policy analysis.
+Subgroup effects (trimmed):
+- Circulatory: 0.0101, 95% CI [0.0028, 0.0175].
+- Diabetes: -0.0082, 95% CI [-0.0234, 0.0069].
 
-## 8. Project Timeline
+### 5.2 Secondary Treatment: Diabetes Medication Prescribed
+- Treatment prevalence: 0.7723.
+- Observed readmission rates:
+  - No diabetes medication prescribed: 0.0987
+  - Diabetes medication prescribed: 0.1184
+- Observed risk difference: 0.0197.
+- AIPW ATE: 0.0151, 95% CI [0.0111, 0.0190].
+- AIPW ATE (trimmed): 0.0151, 95% CI [0.0112, 0.0191].
 
-* **Phase 1 (4 weeks)**: Data exploration, pre-processing, and development of the causal diagram.
-* **Phase 2 (6 weeks)**: Implementation of causal inference methods and model development using EconML.
-* **Phase 3 (4 weeks)**: Comparison of causal and non-causal ML models, and interpretation of results.
-* **Phase 4 (2 weeks)**: Documentation, report writing, and presentation.
+Subgroup effects (trimmed):
+- Circulatory: 0.0242, 95% CI [0.0170, 0.0314].
+- Diabetes: -0.0046, 95% CI [-0.0171, 0.0079].
 
-## 9. Project Team
+## 6. Interpretation Implemented
+- Both treatment definitions are associated with higher adjusted 30-day readmission risk.
+- Adjusted effects are smaller than naive observed differences, consistent with confounding adjustment reducing bias magnitude.
+- Trimmed and full-sample AIPW estimates are very close, indicating acceptable overlap for the implemented treatment definitions.
+- Effect heterogeneity is present, with stronger positive effects in circulatory primary diagnoses and weaker/uncertain effects in diabetes primary diagnoses.
 
-* Data Scientists
-* Machine Learning Engineers
-* Domain Expert (Healthcare)
+## 7. Current Deliverables in Repository
+- Executable notebook with full causal workflow and outputs.
+- Visual overlap diagnostics for each treatment.
+- Table outputs for naive vs adjusted effects and subgroup effects.
+- Final conclusions section in notebook summarizing report-ready findings.
 
-## 10. Deliverables
+## 8. Limitations Explicitly Acknowledged
+- Observational assumptions remain required, especially no important unmeasured confounding.
+- Estimates are conditional on current variable encoding, adjustment set, and model class choices.
+- This notebook does not yet include bootstrap confidence intervals or sensitivity analysis for hidden bias.
 
-* Comprehensive report on methodology and findings.
-* Documented, reproducible code base.
-* Presentation summarizing results.
-* Visualized causal model diagram.
-* Comparison of causal and non-causal ML models.
-
-## 11. Project Success Criteria
-
-* Successful implementation of planned causal inference methods.
-* Quantifiable evidence of causal effects of HbA1c measurement.
-* Demonstrated improvement in model explainability.
-* Identification of key confounding variables and causal pathways, including direct and indirect effects.
-* Actionable insights for healthcare improvement.
-
-This charter provides a clear framework for conducting causal analysis. By using the diabetes dataset and applying rigorous causal inference techniques, this project will demonstrate how causality improves ML models and deepens understanding of factors influencing hospital readmission rates.
+## 9. Recommended Next Extensions
+- Add bootstrap confidence intervals for AIPW estimates.
+- Add insulin-specific escalation treatment definitions.
+- Add formal sensitivity analyses for unmeasured confounding and model robustness.
 
