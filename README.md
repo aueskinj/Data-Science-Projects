@@ -1,211 +1,134 @@
 # Data Science Projects
 
-This repository contains a collection of data science projects and notebooks. Each notebook explores different data science techniques, analyses, or machine learning models applied to various datasets and problems. Below is a detailed description of each notebook.
+A collection of notebooks covering exploratory data analysis, causal inference, supervised learning, and NLP fine-tuning across economic, healthcare, and business datasets.
 
-## Table of Contents
+## Contents
 
 1. [Student Performance Indicator](#1-student-performance-indicator)
-2. [Effect of Government Social Programs on Poverty in Kenya](#2-effect-of-government-social-programs-on-poverty-in-kenya)
-3. [Effect of Petroleum Prices Changes on the Demand for Petroleum in Kenya](#3-effect-of-petroleum-prices-changes-on-the-demand-for-petroleum-in-kenya)
-4. [Effect of Taxation on SME Performance](#4-effect-of-taxation-on-sme-performance)
-5. [Fine-Tuning English-Swahili Translation Model](#5-fine-tuning-english-swahili-translation-model)
+2. [Government Social Programs and Poverty in Kenya](#2-government-social-programs-and-poverty-in-kenya)
+3. [Petroleum Price Changes and Demand in Kenya](#3-petroleum-price-changes-and-demand-in-kenya)
+4. [Taxation and SME Performance](#4-taxation-and-sme-performance)
+5. [Fine-Tuning an English-Swahili Translation Model](#5-fine-tuning-an-english-swahili-translation-model)
 6. [Lyrics Finder](#6-lyrics-finder)
 7. [English-Kiswahili Translation Notebook](#7-english-kiswahili-translation-notebook)
 8. [PandemAI](#8-pandemai)
 9. [Supervised Learning with SVM](#9-supervised-learning-with-svm)
 10. [Supervised Learning with Random Forests](#10-supervised-learning-with-random-forests)
-11. [Customer Churn Prediction](#11-Customer-Churn-Prediction)
-12. [Causal Inference with Bayesian Networks](#12-Causal Inference with Bayesian Networks)
+11. [Customer Churn Prediction](#11-customer-churn-prediction)
+12. [Causal Inference with Bayesian Networks](#12-causal-inference-with-bayesian-networks)
 
 ---
 
 ## 1. Student Performance Indicator
 
-**Notebook**: [EDA_STUDENT_PERFORMANCE_.ipynb](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/EDA_STUDENT_PERFORMANCE_.ipynb)
+[Notebook](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/EDA_STUDENT_PERFORMANCE_.ipynb)
 
-This notebook focuses on analyzing student performance through a comprehensive Exploratory Data Analysis (EDA). It follows the machine learning project lifecycle, starting from understanding the problem statement to data preprocessing, modeling, and choosing the best model. 
+End-to-end EDA on student performance data: problem definition, data checks, preprocessing, model training, and model selection.
 
-### Key Steps:
-- **Understanding the Problem Statement:** Defining the objectives of the analysis.
-- **Data Collection:** Gathering the relevant data on student performance.
-- **Data Checks to Perform:** Ensuring the data's integrity and suitability for analysis.
-- **Exploratory Data Analysis:** Analyzing and visualizing data to uncover patterns and insights.
-- **Data Pre-Processing:** Preparing data for modeling by handling missing values, encoding categorical variables, etc.
-- **Model Training:** Training various machine learning models.
-- **Choose Best Model:** Selecting the most effective model based on evaluation metrics.
+## 2. Government Social Programs and Poverty in Kenya
 
----
+[Notebook](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/Effect_of_government_social_programs_on_poverty_in_Kenya.ipynb)
 
-## 2. Effect of Government Social Programs on Poverty in Kenya
+Descriptive and correlation analysis of how government social programs relate to poverty levels in Kenya.
 
-**Notebook**: [Effect_of_government_social_programs_on_poverty_in_Kenya.ipynb](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/Effect_of_government_social_programs_on_poverty_in_Kenya.ipynb)
+## 3. Petroleum Price Changes and Demand in Kenya
 
-This notebook performs descriptive analytics to examine the effect of government social programs on poverty in Kenya. The main focus is on understanding correlations and drawing insights from the data.
+[Notebook](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/Effect_of_petroleum_prices_changes_on_the_demand_for_petroleum_in_Kenya.ipynb)
 
-### Key Steps:
-- **Correlation Analysis:** Identifying relationships between variables to understand how social programs may influence poverty.
-- **Descriptive Analytics:** Summarizing and visualizing the data to gain insights into the impact of social programs.
+Correlation and descriptive analysis of petroleum price changes against demand trends in the Kenyan market.
 
----
+## 4. Taxation and SME Performance
 
-## 3. Effect of Petroleum Prices Changes on the Demand for Petroleum in Kenya
+[Notebook](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/Effect_of_taxation_on_sme_performance.ipynb)
 
-**Notebook**: [Effect_of_petroleum_prices_changes_on_the_demand_for_petroleum_in_Kenya.ipynb](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/Effect_of_petroleum_prices_changes_on_the_demand_for_petroleum_in_Kenya.ipynb)
+Frequency and descriptive analysis of how taxation affects the performance of small and medium enterprises.
 
-This notebook explores the relationship between changes in petroleum prices and the demand for petroleum in Kenya. Through descriptive analytics, it aims to uncover correlations and patterns in the data.
+## 5. Fine-Tuning an English-Swahili Translation Model
 
-### Key Steps:
-- **Correlation Analysis:** Analyzing the relationship between petroleum prices and demand.
-- **Descriptive Analytics:** Utilizing visualizations and statistical summaries to understand market trends.
+[Notebook](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/FineTuningEngSwaModel.ipynb)
 
----
-
-## 4. Effect of Taxation on SME Performance
-
-**Notebook**: [Effect_of_taxation_on_sme_performance.ipynb](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/Effect_of_taxation_on_sme_performance.ipynb)
-
-This notebook investigates the impact of taxation on the performance of Small and Medium Enterprises (SMEs). It employs frequency analysis to explore common responses and patterns in the data.
-
-### Key Steps:
-- **Frequency Analysis:** Identifying the most common responses and trends related to taxation and SME performance.
-- **Descriptive Analytics:** Visualizing the data to gain insights into how taxation affects SMEs.
-
----
-
-## 5. Fine-Tuning English-Swahili Translation Model
-
-**Notebook**: [FineTuningEngSwaModel.ipynb](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/FineTuningEngSwaModel.ipynb)
-
-This notebook demonstrates the process of fine-tuning a translation model for English to Swahili. It utilizes deep learning techniques and frameworks like TensorFlow and Keras for model training and evaluation.
-
-### Key Steps:
-- **Import Libraries:** Utilizing TensorFlow, Keras, Matplotlib, Seaborn, Numpy, and Sklearn for various tasks.
-- **Load and Preprocess the Dataset:** Working with the CIFAR-10 dataset, normalizing images, and converting labels for training.
-- **Model Training:** Fine-tuning the translation model using deep learning techniques.
-- **Evaluation:** Assessing the model's performance with appropriate metrics.
-
----
+Fine-tunes a translation model using TensorFlow and Keras, with preprocessing, training, and evaluation steps.
 
 ## 6. Lyrics Finder
 
-**Notebook**: [LyricsFinder.ipynb](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/LyricsFinder.ipynb)
+[Notebook](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/LyricsFinder.ipynb)
 
-This notebook provides a tool for finding song lyrics by scraping Genius.com. It covers the process of collecting URLs and fetching lyrics for a specified number of songs by an artist.
-
-### Key Steps:
-- **Get URLs:** Obtaining a list of Genius.com URLs for the desired number of songs by a specific artist.
-- **Fetch Lyrics:** Scraping the lyrics from the URLs using BeautifulSoup, including a fix for HTML parsing.
-
----
+Scrapes Genius.com for an artist's song URLs, then fetches and parses lyrics with BeautifulSoup.
 
 ## 7. English-Kiswahili Translation Notebook
 
-**Notebook**: [eng_kisw_traslation_notebook.ipynb](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/eng_kisw_traslation_notebook.ipynb)
+[Notebook](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/eng_kisw_traslation_notebook.ipynb)
 
-This notebook focuses on fine-tuning a model for English-Kiswahili translation tasks. It emphasizes the importance of using GPU for accelerated computation and covers various aspects of model fine-tuning.
-
-### Key Steps:
-- **Switch Runtime to GPU:** Ensuring that the notebook utilizes GPU for faster processing.
-- **Model Fine-Tuning:** Fine-tuning a translation model for improved performance on the English-Kiswahili task.
-
----
+Fine-tunes an English-Kiswahili translation model on GPU runtime.
 
 ## 8. PandemAI
 
-**Notebook**: [pandemai.ipynb](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/pandemai.ipynb)
+[Notebook](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/pandemai.ipynb)
 
-This notebook deals with data cleaning and formatting as part of a larger project named "PandemAI." It outlines the steps involved in preparing data for analysis and modeling.
-
-### Key Steps:
-- **Data Cleaning:** Removing inconsistencies and preparing the dataset for analysis.
-- **Formatting:** Structuring the data in a way that's suitable for further exploration and modeling.
-
----
+Data cleaning and formatting pipeline supporting the broader PandemAI project.
 
 ## 9. Supervised Learning with SVM
 
-**Notebook**: [supervised_learning(SVM).ipynb](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/supervised_learning(SVM).ipynb)
+[Notebook](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/supervised_learning(SVM).ipynb)
 
-This notebook explores supervised learning techniques using Support Vector Machines (SVM). It delves into training and evaluating SVM models on various datasets.
-
-### Key Steps:
-- **Model Training:** Implementing SVM algorithms for supervised learning tasks.
-- **Evaluation:** Assessing the performance of SVM models with relevant metrics.
-
----
+Trains and evaluates a Support Vector Machine classifier on a supervised learning task.
 
 ## 10. Supervised Learning with Random Forests
 
-**Notebook**: [supervised_learning(randomForests).ipynb](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/supervised_learning(randomForests).ipynb)
+[Notebook](https://colab.research.google.com/github/aueskinj/Data-Science-Projects/blob/main/supervised_learning(randomForests).ipynb)
 
-This notebook examines the application of Random Forest algorithms for supervised learning. It covers the process of training models, selecting attributes, and evaluating performance.
+Attribute selection, model training, and evaluation (confusion matrix, classification report) for a Random Forest classifier.
 
-### Key Steps:
-- **Attribute Selection:** Identifying relevant attributes for modeling.
-- **Model Training:** Implementing Random Forest algorithms for classification tasks.
-- **Evaluation:** Utilizing confusion matrices and classification reports to measure accuracy and performance.
+## 11. Customer Churn Prediction
+
+[Notebook](https://github.com/aueskinj/Data-Science-Projects/blob/main/Customer_Churn_Prediction.ipynb)
+
+Predicts customer churn on retail customer data using Random Forest, AdaBoost, SVC, and XGBoost, compared by accuracy and confusion matrix.
+
+**Dependencies:** pandas 1.5.3, numpy 1.24.3, matplotlib 3.8.0, seaborn 0.14.0, scikit-learn 1.3.0, xgboost 2.1.0
+
+**Data:** [Online Retail Customer Churn Dataset](https://www.kaggle.com/datasets/)
+
+## 12. Causal Inference with Bayesian Networks
+
+[Notebook](https://github.com/aueskinj/Data-Science-Projects/blob/main/CausalML/healthcareml/healthcarecausalml.ipynb)
+
+Estimates the causal effect of treatment decisions on 30-day hospital readmission using the Diabetes 130-US Hospitals (1999-2008) dataset, after removing encounters that cannot structurally be readmitted within 30 days.
+
+**Cohort:** 99,340 encounters, after excluding discharge dispositions `{11, 13, 14, 19, 20, 21}`.
+
+**Treatments analyzed:**
+- Medication change during encounter (primary)
+- Diabetes medication prescribed (secondary)
+
+**Method:** Logistic regression propensity model, gradient boosting outcome models, AIPW (doubly robust) estimation, with positivity checks and trimming at propensity [0.05, 0.95].
+
+**Results:**
+
+| Treatment | Prevalence | AIPW ATE (trimmed) | 95% CI |
+|---|---|---|---|
+| Medication change | 0.464 | 0.0075 | 0.0035 to 0.0115 |
+| Diabetes medication prescribed | 0.772 | 0.0151 | 0.0112 to 0.0191 |
+
+Both treatments show a positive adjusted association with readmission risk, smaller than the naive difference, consistent with confounding adjustment. Effects are stronger in circulatory-diagnosis encounters and weaker or uncertain in diabetes-diagnosis encounters.
+
+**Limitations:** Estimates rely on no-unmeasured-confounding assumptions and current feature definitions. No bootstrap intervals or formal sensitivity analysis yet.
+
+**Next steps:** Bootstrap intervals for AIPW estimates, insulin-specific treatment definitions, sensitivity analysis for hidden confounding.
 
 ---
-## 11. Customer Churn Prediction
-**Notebook**: [Customer Churn Prediction.ipynb](https://github.com/aueskinj/Data-Science-Projects/blob/main/Customer_Churn_Prediction.ipynb)
-#### **Project Overview**
-This project focuses on predicting customer churn using various machine learning models to identify factors contributing to customer attrition. The analysis is performed using a dataset of retail customer information, including demographic and behavioral attributes.
-
-#### **Key Components**
-i. **Data Exploration:**
-   - Loaded and explored the dataset to understand its structure and the distribution of features.
-   - Visualized target variable distribution, numerical and categorical features, and correlations.
-
-ii. **Feature Engineering:**
-   - Encoded categorical variables and scaled numerical features for model training.
-   - Split data into training and testing sets.
-
-iii. **Model Training and Evaluation:**
-   - Trained several classification models: Random Forest, AdaBoost, Support Vector Classifier, and XGBoost.
-   - Evaluated models using accuracy, classification reports, and confusion matrices.
-
-iv. **Results:**
-   - Compared model performance to select the best performing model for predicting customer churn.
-   - Generated insights into the effectiveness of different machine learning algorithms in the context of customer churn prediction.
-
-
-#### **Dependencies**
-- `pandas`: 1.5.3
-- `numpy`: 1.24.3
-- `matplotlib`: 3.8.0
-- `seaborn`: 0.14.0
-- `scikit-learn`: 1.3.0
-- `xgboost`: 2.1.0
-
-#### **Acknowledgements**
-- Dataset: [Online Retail Customer Churn Dataset](https://www.kaggle.com/datasets/)
 
 ## Getting Started
 
-To explore these notebooks, you can open them directly in Google Colab using the provided links. Each notebook contains the necessary code and instructions to replicate the analyses and results.
+**Requirements:** Python 3.x, Jupyter, and the libraries listed per notebook (TensorFlow, Keras, scikit-learn, pandas, BeautifulSoup, etc.)
 
-### Prerequisites
+```bash
+git clone https://github.com/aueskinj/Data-Science-Projects.git
+cd Data-Science-Projects
+```
 
-- Python 3.x
-- Jupyter Notebook
-- Libraries: TensorFlow, Keras, Matplotlib, Seaborn, Numpy, Scikit-learn, BeautifulSoup, Pandas, etc.
-
-### Running the Notebooks
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/aueskinj/Data-Science-Projects.git
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd Data-Science-Projects
-   ```
-3. Open a Jupyter Notebook environment and select the desired notebook to run.
+Open any notebook in Jupyter or via the Colab links above.
 
 ### Author
 
-- **Kimuhu Njuguna**
-
-Feel free to explore the notebooks, modify the code, and apply these techniques to your own data science projects!
-
----
+Kimuhu Njuguna
